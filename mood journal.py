@@ -1,0 +1,57 @@
+import tkinter as tk
+from tkinter import messagebox
+from datetime import datetime
+
+class MoodJournal:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Mood Journal")
+        self.mood_log = []
+
+        # Create mood dropdown
+        self.mood_label = tk.Label(self.root, text="Select Mood:")
+        self.mood_label.pack()
+        self.mood_var = tk.StringVar(self.root)
+        self.mood_var.set("Happy")
+        self.mood_options = ["Happy", "Sad", "Anxious", "Calm"]
+        self.mood_menu = tk.OptionMenu(self.root, self.mood_var, *self.mood_options)
+        self.mood_menu.pack()
+
+        # Create notes entry
+        self.notes_label = tk.Label(self.root, text="Add Notes:")
+        self.notes_label.pack()
+        self.notes_entry = tk.Text(self.root, height=5, width=30)
+        self.notes_entry.pack()
+
+        # Create submit button
+        self.submit_button = tk.Button(self.root, text="Submit", command=self.submit_mood)
+        self.submit_button.pack()
+
+        # Create log display
+        self.log_label = tk.Label(self.root, text="Mood Log:")
+        self.log_label.pack()
+        self.log_text = tk.Text(self.root, height=10, width=40)
+        self.log_text.pack()
+
+    def submit_mood(self):
+        mood = self.mood_var.get()
+        notes = self.notes_entry.get("1.0", "end-1c")
+        self.mood_log.append({
+            "Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "Mood": mood,
+            "Notes": notes
+        })
+        self.update_log()
+        self.notes_entry.delete("1.0", "end")
+
+    def update_log(self):
+        self.log_text.delete("1.0", "end")
+        for log in self.mood_log:
+            self.log_text.insert("end", f"Date: {log['Date']}\nMood: {log['Mood']}\nNotes: {log['Notes']}\n\n")
+
+    def run(self):
+        self.root.mainloop()
+
+if __name__ == "__main__":
+    app = MoodJournal()
+    app.run()
