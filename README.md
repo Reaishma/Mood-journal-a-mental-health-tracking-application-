@@ -1,2 +1,40 @@
-# Mood-journal-a-mental-health-tracking-application-
-App provides a intitutive interface for users to track their mental health and gain insights into their emotions 
+Objective:
+The objective of the project is to create a user-friendly and feature-rich application that allows users to track their moods and emotions over time, providing insights and reminders to help them manage their mental health.
+
+
+Skills:
+
+1. Programming skills in Python
+2. Knowledge of Tkinter library and GUI development
+3. Understanding of event-driven programming
+4. Knowledge of matplotlib for data visualization
+5. Understanding of JSON for data storage
+6. Problem-solving and debugging skills
+
+Tools:
+
+1. Python programming language
+2. Tkinter library for GUI development
+3. tkcalendar library for calendar integration
+4. matplotlib library for data visualization
+5. JSON for data storage
+
+Outcomes:
+
+1. A functional Mood Journal app that allows users to track their moods and emotions
+2. A simple and user-friendly interface that makes it easy for users to interact with the application
+3. A log of all submitted moods and notes that can be viewed by the user
+4. Visual representation of mood data using charts
+5. Reminders and notifications to help users manage their mental health
+6. Data storage using JSON to persist user data
+
+Features:
+
+1. Mood logging with notes
+2. Calendar integration
+3. Chart visualization
+4. Validation
+5. Storage using JSON
+6. Notifications
+7. User-friendly GUI
+   
