@@ -81,3 +81,4 @@ class MoodJournal:
 if __name__ == "__main__":
     app = MoodJournal()
     app.run()
+
