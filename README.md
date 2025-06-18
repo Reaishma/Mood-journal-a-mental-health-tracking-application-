@@ -1,40 +1,78 @@
-Objective:
-The objective of the project is to create a user-friendly and feature-rich application that allows users to track their moods and emotions over time, providing insights and reminders to help them manage their mental health.
 
 
-Skills:
+Mood Journal App 🌟
 
-1. Programming skills in Python
-2. Knowledge of Tkinter library and GUI development
-3. Understanding of event-driven programming
-4. Knowledge of matplotlib for data visualization
-5. Understanding of JSON for data storage
-6. Problem-solving and debugging skills
+Overview
+A user-friendly and feature-rich application that allows users to track their moods and emotions over time, providing insights and reminders to help them manage their mental health 📝
 
-Tools:
+Features
+1. *Mood Logging*: Log your moods and emotions with notes 📊
+2. *Calendar Integration*: View your mood logs on a calendar 📆
+3. *Chart Visualization*: Visualize your mood data using charts 📈
+4. *Validation*: Validate user input to ensure accurate data 📝
+5. *Storage using JSON*: Store user data persistently using JSON 📁
+6. *Reminders and Notifications*: Receive reminders and notifications to help manage mental health 📅
+7. *User-friendly GUI*: Simple and intuitive interface for easy user interaction 📱
 
-1. Python programming language
-2. Tkinter library for GUI development
-3. tkcalendar library for calendar integration
-4. matplotlib library for data visualization
-5. JSON for data storage
+Technologies Used
+- Python 
+- Tkinter library for GUI development 📚
+- tkcalendar library for calendar integration 📆
+- matplotlib library for data visualization 📈
+- JSON for data storage 📁
 
-Outcomes:
+*Code Snippets*
 
-1. A functional Mood Journal app that allows users to track their moods and emotions
-2. A simple and user-friendly interface that makes it easy for users to interact with the application
-3. A log of all submitted moods and notes that can be viewed by the user
-4. Visual representation of mood data using charts
-5. Reminders and notifications to help users manage their mental health
-6. Data storage using JSON to persist user data
+Mood Logging
 
-Features:
+def log_mood():
+    mood = mood_entry.get()
+    notes = notes_entry.get("1.0", tk.END)
+    # Store mood and notes in JSON file
+    with open("mood_log.json", "a") as f:
+        json.dump({"mood": mood, "notes": notes}, f)
+        f.write("\n")
 
-1. Mood logging with notes
-2. Calendar integration
-3. Chart visualization
-4. Validation
-5. Storage using JSON
-6. Notifications
-7. User-friendly GUI
-   
+*Chart Visualization*
+
+import matplotlib.pyplot as plt
+
+def visualize_mood_data():
+    # Load mood data from JSON file
+    with open("mood_log.json", "r") as f:
+        mood_data = [json.loads(line) for line in f.readlines()]
+    
+    # Extract mood values
+    moods = [data["mood"] for data in mood_data]
+    
+    # Plot mood data
+    plt.plot(moods)
+    plt.xlabel("Date")
+    plt.ylabel("Mood")
+    plt.title("Mood Log")
+    plt.show()
+
+*Outcomes*
+- A functional Mood Journal app that allows users to track their moods and emotions 📊
+- A simple and user-friendly interface for easy user interaction 📱
+- A log of all submitted moods and notes that can be viewed by the user 📝
+- Visual representation of mood data using charts 📈
+- Reminders and notifications to help users manage their mental health 📅
+
+*Benefits*
+- *Improved Mental Health*: Track and manage your emotions to improve your mental well-being 🌈
+- *Increased Self-Awareness*: Gain insights into your mood patterns and triggers 🔍
+- *Personalized Insights*: Receive tailored recommendations for managing your mental health 📊
+- *Easy Tracking*: Log your moods and emotions quickly and easily 📝
+- *Data Visualization*: Visualize your mood data to identify trends and patterns 📈
+
+*Screenshots*
+For output screenshots, please refer to the attached document:
+https://docs.google.com/document/d/18Zs2IA864w8qtKk2tej9_r1putPqEiC93Q3CyZbya1w/edit?usp=drivesdk
+
+Author
+- *Reaishma N*
+
+License
+MIT License 📄
+
