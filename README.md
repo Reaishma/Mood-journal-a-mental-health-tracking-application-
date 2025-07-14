@@ -143,7 +143,7 @@ NODE_ENV=development
 
 ##🚀 Live Demo 
 
-[View live demo](.   )
+[View live demo](https://reaishma.github.io/Mood-journal-a-mental-health-tracking-application-/)
 
 ## Key Components
 
