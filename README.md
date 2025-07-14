@@ -4,6 +4,22 @@
 
 This is a full-stack mental health tracking application built with React, Express.js, and PostgreSQL. The application allows users to track their daily moods, manage habits, write journal entries, and view analytics about their mental health journey. It features a mobile-first design with a clean, modern interface using shadcn/ui components.
 
+## 🌟 Features
+
+### Core Functionality
+- **Daily Mood Tracking**: 5-point mood scale with emoji interface (😢 😟 😐 😊 🤗)
+- **Habit Management**: Track daily wellness habits with visual progress indicators
+- **Journal Entries**: Write thoughts and reflections with mood correlation
+- **Analytics Dashboard**: Weekly progress tracking and trend visualization
+- **Streak Tracking**: Monitor daily check-in consistency
+
+### User Experience
+- **Mobile-First Design**: Optimized for mobile devices with responsive layout
+- **Advanced Animations**: Smooth transitions using Framer Motion
+- **Real-time Feedback**: Toast notifications for user actions
+- **Progressive Web App**: App-like experience in the browser
+- **Accessible UI**: Built with shadcn/ui components for accessibility
+
 
 ## System Architecture
 
