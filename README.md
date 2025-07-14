@@ -141,7 +141,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/mindwell
 NODE_ENV=development
 ```
 
-##🚀 Live Demo 
+## 🚀 Live Demo 
 
 [View live demo](https://reaishma.github.io/Mood-journal-a-mental-health-tracking-application-/)
 
