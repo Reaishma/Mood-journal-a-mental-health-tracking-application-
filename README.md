@@ -1,78 +1,99 @@
+# Mental Health Tracking Application
+
+## Overview
+
+This is a full-stack mental health tracking application built with React, Express.js, and PostgreSQL. The application allows users to track their daily moods, manage habits, write journal entries, and view analytics about their mental health journey. It features a mobile-first design with a clean, modern interface using shadcn/ui components.
 
 
-Mood Journal App 🌟
+## System Architecture
 
-Overview
-A user-friendly and feature-rich application that allows users to track their moods and emotions over time, providing insights and reminders to help them manage their mental health 📝
+### Frontend Architecture
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized builds
+- **Routing**: Wouter for lightweight client-side routing
+- **State Management**: TanStack Query (React Query) for server state management
+- **UI Components**: shadcn/ui component library built on Radix UI primitives
+- **Styling**: Tailwind CSS with custom design system variables
+- **Animations**: Framer Motion for smooth interactions
 
-Features
-1. *Mood Logging*: Log your moods and emotions with notes 📊
-2. *Calendar Integration*: View your mood logs on a calendar 📆
-3. *Chart Visualization*: Visualize your mood data using charts 📈
-4. *Validation*: Validate user input to ensure accurate data 📝
-5. *Storage using JSON*: Store user data persistently using JSON 📁
-6. *Reminders and Notifications*: Receive reminders and notifications to help manage mental health 📅
-7. *User-friendly GUI*: Simple and intuitive interface for easy user interaction 📱
+### Backend Architecture
+- **Runtime**: Node.js with TypeScript
+- **Framework**: Express.js for REST API
+- **Database ORM**: Drizzle ORM with PostgreSQL
+- **Database Provider**: Neon Database (serverless PostgreSQL)
+- **Session Management**: connect-pg-simple for PostgreSQL-backed sessions
+- **Development**: Hot reloading with Vite in development mode
 
-Technologies Used
-- Python 
-- Tkinter library for GUI development 📚
-- tkcalendar library for calendar integration 📆
-- matplotlib library for data visualization 📈
-- JSON for data storage 📁
+### Database Schema
+The application uses PostgreSQL with four main tables:
+- **moods**: Stores daily mood ratings (1-5 scale) with optional notes
+- **habits**: User-defined habits with icons, colors, and targets
+- **habit_entries**: Daily habit completion tracking
+- **journal_entries**: Text-based journal entries with optional mood associations
 
-*Code Snippets*
+## Key Components
 
-Mood Logging
+### Data Flow
+1. **Client Requests**: React components use TanStack Query for data fetching
+2. **API Layer**: Express.js routes handle CRUD operations
+3. **Storage Layer**: Currently uses in-memory storage (MemStorage class) with interface for future database integration
+4. **Database**: Drizzle ORM provides type-safe database operations
 
-def log_mood():
-    mood = mood_entry.get()
-    notes = notes_entry.get("1.0", tk.END)
-    # Store mood and notes in JSON file
-    with open("mood_log.json", "a") as f:
-        json.dump({"mood": mood, "notes": notes}, f)
-        f.write("\n")
+### Core Features
+- **Mood Tracking**: Daily 1-5 scale mood logging with emoji interface
+- **Habit Management**: Create, track, and visualize habit completion
+- **Journal Writing**: Rich text journal entries with mood correlation
+- **Analytics Dashboard**: Progress tracking and trend visualization
+- **Mobile-First Design**: Responsive design optimized for mobile devices
 
-*Chart Visualization*
+### UI/UX Design
+- **Design System**: Custom color palette focused on mental health aesthetics
+- **Component Library**: Consistent shadcn/ui components throughout
+- **Navigation**: Bottom tab navigation for mobile-first experience
+- **Animations**: Smooth transitions and micro-interactions for engagement
 
-import matplotlib.pyplot as plt
+## Data Flow
 
-def visualize_mood_data():
-    # Load mood data from JSON file
-    with open("mood_log.json", "r") as f:
-        mood_data = [json.loads(line) for line in f.readlines()]
-    
-    # Extract mood values
-    moods = [data["mood"] for data in mood_data]
-    
-    # Plot mood data
-    plt.plot(moods)
-    plt.xlabel("Date")
-    plt.ylabel("Mood")
-    plt.title("Mood Log")
-    plt.show()
+1. **User Interaction**: User interacts with React components
+2. **Query Management**: TanStack Query handles API calls and caching
+3. **API Requests**: HTTP requests to Express.js REST endpoints
+4. **Data Processing**: Express routes validate data using Zod schemas
+5. **Storage Operations**: Storage interface abstracts data persistence
+6. **Response Handling**: JSON responses with error handling and loading states
 
-*Outcomes*
-- A functional Mood Journal app that allows users to track their moods and emotions 📊
-- A simple and user-friendly interface for easy user interaction 📱
-- A log of all submitted moods and notes that can be viewed by the user 📝
-- Visual representation of mood data using charts 📈
-- Reminders and notifications to help users manage their mental health 📅
+## External Dependencies
 
-*Benefits*
-- *Improved Mental Health*: Track and manage your emotions to improve your mental well-being 🌈
-- *Increased Self-Awareness*: Gain insights into your mood patterns and triggers 🔍
-- *Personalized Insights*: Receive tailored recommendations for managing your mental health 📊
-- *Easy Tracking*: Log your moods and emotions quickly and easily 📝
-- *Data Visualization*: Visualize your mood data to identify trends and patterns 📈
+### Core Dependencies
+- **@neondatabase/serverless**: Serverless PostgreSQL driver
+- **drizzle-orm**: Type-safe ORM for database operations
+- **@tanstack/react-query**: Server state management
+- **@radix-ui/***: Accessible UI component primitives
+- **framer-motion**: Animation library for smooth interactions
+- **zod**: Schema validation for API requests
 
-*Screenshots*
-For output screenshots, please refer to the attached document:
-https://docs.google.com/document/d/18Zs2IA864w8qtKk2tej9_r1putPqEiC93Q3CyZbya1w/edit?usp=drivesdk
+### Development Tools
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Type safety across the application
+- **Tailwind CSS**: Utility-first styling framework
+- **ESBuild**: Fast JavaScript bundler for production
 
-Author
-- *Reaishma N*
+## Deployment Strategy
 
-License
-MIT License 📄
+### Production Build
+- **Frontend**: Vite builds optimized React bundle to `dist/public`
+- **Backend**: ESBuild bundles Express server to `dist/index.js`
+- **Assets**: Static files served from build output directory
+
+### Environment Configuration
+- **Database**: Uses `DATABASE_URL` environment variable for PostgreSQL connection
+- **Development**: Hot reloading with Vite middleware in development mode
+- **Production**: Static file serving with Express in production
+
+### Database Management
+- **Migrations**: Drizzle Kit handles schema migrations
+- **Schema**: Shared TypeScript schema definitions between client and server
+- **Validation**: Zod schemas ensure data integrity at API boundaries
+
+
+
 
