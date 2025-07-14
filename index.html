@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Mental Health Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(262, 83%, 58%) 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .app-container {
+            max-width: 448px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(262, 83%, 58%) 100%);
+            color: white;
+            padding: 20px 24px 16px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .bell-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .bell-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .content {
+            padding: 16px 24px 100px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .streak-badge {
+            display: flex;
+            align-items: center;
+            color: #10b981;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .streak-badge i {
+            margin-right: 4px;
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .mood-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 60px;
+        }
+
+        .mood-btn:hover {
+            background: #f9fafb;
+        }
+
+        .mood-btn.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid #6366f1;
+        }
+
+        .mood-emoji {
+            font-size: 24px;
+            margin-bottom: 8px;
+            transition: transform 0.3s;
+        }
+
+        .mood-btn.selected .mood-emoji {
+            transform: scale(1.2);
+        }
+
+        .mood-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .mood-btn.selected .mood-label {
+            color: #6366f1;
+            font-weight: 500;
+        }
+
+        .journal-area {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .journal-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .journal-textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(262, 83%, 58%) 100%);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .progress-item {
+            text-align: center;
+        }
+
+        .progress-ring {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 8px;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 6;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.8s ease-out;
+        }
+
+        .progress-value {
+            position: absolute;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .progress-sublabel {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .habits-section h3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .manage-btn {
+            background: none;
+            border: none;
+            color: #6366f1;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .habit-list {
+            list-style: none;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .habit-item:last-child {
+            border-bottom: none;
+        }
+
+        .habit-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .habit-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 14px;
+        }
+
+        .habit-details h4 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .habit-details p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .habit-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .habit-checkbox:hover {
+            transform: scale(1.1);
+        }
+
+        .habit-checkbox.completed {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .habit-checkbox.completed::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .habit-checkbox.loading {
+            opacity: 0.6;
+        }
+
+        .habit-checkbox.loading::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .info { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .secondary { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 448px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #6366f1;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+        }
+
+        .nav-indicator {
+            width: 24px;
+            height: 2px;
+            background: #6366f1;
+            border-radius: 2px;
+            margin-top: 4px;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(262, 83%, 58%) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            z-index: 40;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 100;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page {
+            display: block;
+        }
+
+        .page.hidden {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trend-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .settings-list {
+            space-y: 16px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-title {
+            font-weight: 500;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .setting-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #6366f1;
+        }
+
+        .toggle-slider {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        .journal-entry-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .journal-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .journal-entry-date {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .journal-entry-mood {
+            font-size: 16px;
+        }
+
+        .journal-entry-content {
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .habit-trend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .habit-trend-item:last-child {
+            border-bottom: none;
+        }
+
+        .habit-trend-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .habit-trend-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habit-trend-bar {
+            width: 60px;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .habit-trend-fill {
+            height: 100%;
+            background: #10b981;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .habit-trend-percentage {
+            font-size: 12px;
+            color: #6b7280;
+            min-width: 30px;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .content {
+                padding: 16px 16px 100px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div>
+                    <h1>MindWell</h1>
+                    <p id="current-date"></p>
+                </div>
+                <button class="bell-btn" onclick="showToast('You\'re all caught up! No new notifications.', 'success')">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-dot"></div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content" id="main-content">
+            <!-- Home Page -->
+            <div id="home-page" class="page">
+                <!-- Mood Check-in Card -->
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h2 class="card-title">How are you feeling?</h2>
+                        <div class="streak-badge">
+                            <i class="fas fa-fire"></i>
+                            <span id="streak-count">0 day streak</span>
+                        </div>
+                    </div>
+
+                    <div class="mood-selector">
+                        <button class="mood-btn" data-mood="1" onclick="selectMood(1)">
+                            <div class="mood-emoji">😢</div>
+                            <div class="mood-label">Terrible</div>
+                        </button>
+                        <button class="mood-btn" data-mood="2" onclick="selectMood(2)">
+                            <div class="mood-emoji">😟</div>
+                            <div class="mood-label">Bad</div>
+                        </button>
+                        <button class="mood-btn" data-mood="3" onclick="selectMood(3)">
+                            <div class="mood-emoji">😐</div>
+                            <div class="mood-label">Okay</div>
+                        </button>
+                        <button class="mood-btn" data-mood="4" onclick="selectMood(4)">
+                            <div class="mood-emoji">😊</div>
+                            <div class="mood-label">Good</div>
+                        </button>
+                        <button class="mood-btn" data-mood="5" onclick="selectMood(5)">
+                            <div class="mood-emoji">🤗</div>
+                            <div class="mood-label">Great</div>
+                        </button>
+                    </div>
+
+                    <div class="journal-area">
+                        <textarea 
+                            class="journal-textarea" 
+                            rows="3" 
+                            placeholder="What's on your mind today? (Optional)"
+                            id="journal-note"
+                        ></textarea>
+                    </div>
+
+                    <button class="btn-primary" onclick="saveMood()" id="save-mood-btn">
+                        <i class="fas fa-check" style="margin-right: 8px;"></i>
+                        Save Check-in
+                    </button>
+                </div>
+
+                <!-- Progress Overview Card -->
+                <div class="card fade-in">
+                    <h3 class="card-title">This Week's Progress</h3>
+                    
+                    <div class="progress-section">
+                        <div class="progress-item">
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
+                                    <circle class="progress-ring-fill" cx="40" cy="40" r="34" 
+                                            stroke="#10b981" stroke-dasharray="213.6" 
+                                            stroke-dashoffset="213.6" id="checkin-progress"></circle>
+                                </svg>
+                                <div class="progress-value" id="checkin-percentage">0%</div>
+                            </div>
+                            <div class="progress-label">Check-ins</div>
+                            <div class="progress-sublabel" id="checkin-count">0 of 7 days</div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
+                                    <circle class="progress-ring-fill" cx="40" cy="40" r="34" 
+                                            stroke="#6366f1" stroke-dasharray="213.6" 
+                                            stroke-dashoffset="213.6" id="mood-progress"></circle>
+                                </svg>
+                                <div class="progress-value" id="avg-mood">0.0</div>
+                            </div>
+                            <div class="progress-label">Avg Mood</div>
+                            <div class="progress-sublabel">Above baseline</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Habits Card -->
+                <div class="card fade-in">
+                    <div class="habits-section">
+                        <h3>
+                            Today's Habits
+                            <button class="manage-btn" onclick="showToast('Habit management feature coming soon!', 'success')">
+                                Manage
+                            </button>
+                        </h3>
+                    </div>
+                    
+                    <ul class="habit-list" id="habits-list">
+                        <!-- Habits will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Trends Page -->
+            <div id="trends-page" class="page hidden">
+                <div class="card fade-in">
+                    <h2 class="card-title">Weekly Mood Trends</h2>
+                    <div class="chart-container" style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9fafb; border-radius: 12px; margin-bottom: 20px;">
+                        <canvas id="mood-chart" width="300" height="150"></canvas>
+                    </div>
+                    <div class="trend-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="trend-avg-mood">3.8</div>
+                            <div class="stat-label">Average Mood</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="trend-best-day">Thursday</div>
+                            <div class="stat-label">Best Day</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="trend-improvement">+12%</div>
+                            <div class="stat-label">This Week</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card fade-in">
+                    <h3 class="card-title">Habit Completion</h3>
+                    <div id="habit-trends">
+                        <!-- Habit trend data will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Page -->
+            <div id="journal-page" class="page hidden">
+                <div class="card fade-in">
+                    <h2 class="card-title">Journal Entries</h2>
+                    <div class="journal-area">
+                        <textarea 
+                            class="journal-textarea" 
+                            rows="4" 
+                            placeholder="Write about your day, thoughts, or feelings..."
+                            id="journal-entry"
+                        ></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="saveJournalEntry()">
+                        <i class="fas fa-save" style="margin-right: 8px;"></i>
+                        Save Entry
+                    </button>
+                </div>
+
+                <div id="journal-entries">
+                    <!-- Journal entries will be populated here -->
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profile-page" class="page hidden">
+                <div class="card fade-in">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(262, 83%, 58%) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold; margin-right: 16px;">
+                            MW
+                        </div>
+                        <div>
+                            <h2 style="margin: 0; font-size: 20px; font-weight: 600;">MindWell User</h2>
+                            <p style="margin: 4px 0 0; color: #6b7280; font-size: 14px;">Mental wellness journey</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card fade-in">
+                    <h3 class="card-title">Journey Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="profile-total-entries">0</div>
+                            <div class="stat-label">Total Entries</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="profile-current-streak">0</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="profile-best-month">Jan</div>
+                            <div class="stat-label">Best Month</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="profile-habits-completed">0</div>
+                            <div class="stat-label">Habits Done</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card fade-in">
+                    <h3 class="card-title">Settings</h3>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-title">Notifications</div>
+                                <div class="setting-desc">Daily check-in reminders</div>
+                            </div>
+                            <div class="toggle-switch" onclick="toggleSetting('notifications')">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-title">Dark Mode</div>
+                                <div class="setting-desc">Toggle dark theme</div>
+                            </div>
+                            <div class="toggle-switch" onclick="toggleSetting('darkMode')">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-title">Anonymous Analytics</div>
+                                <div class="setting-desc">Help improve the app</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSetting('analytics')">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-item active" onclick="showPage('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+                <div class="nav-indicator"></div>
+            </div>
+            <div class="nav-item" onclick="showPage('trends')">
+                <i class="fas fa-chart-line"></i>
+                <span>Trends</span>
+            </div>
+            <div class="nav-item" onclick="showPage('journal')">
+                <i class="fas fa-book"></i>
+                <span>Journal</span>
+            </div>
+            <div class="nav-item" onclick="showPage('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </nav>
+
+        <!-- Floating Action Button -->
+        <button class="floating-btn" onclick="showToast('Quick action coming soon!', 'success')">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Global state
+        let selectedMood = null;
+        let currentPage = 'home';
+        let settings = JSON.parse(localStorage.getItem('settings') || '{"notifications": true, "darkMode": false, "analytics": true}');
+        let habits = [
+            { id: 1, name: 'Exercise', icon: 'fas fa-dumbbell', target: '30 minutes', color: 'success', completed: false },
+            { id: 2, name: 'Meditation', icon: 'fas fa-brain', target: '10 minutes', color: 'info', completed: false },
+            { id: 3, name: 'Sunlight', icon: 'fas fa-sun', target: '15 minutes', color: 'warning', completed: false },
+            { id: 4, name: 'Sleep', icon: 'fas fa-bed', target: '8 hours', color: 'secondary', completed: false }
+        ];
+        let moodEntries = JSON.parse(localStorage.getItem('moodEntries') || '[]');
+        let habitEntries = JSON.parse(localStorage.getItem('habitEntries') || '{}');
+        let journalEntries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            renderHabits();
+            updateProgress();
+            loadTodaysMood();
+            renderJournalEntries();
+            renderTrends();
+            updateProfileStats();
+            updateSettings();
+        });
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                month: 'short', 
+                day: 'numeric' 
+            };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        function selectMood(mood) {
+            selectedMood = mood;
+            
+            // Update UI
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
+            
+            // Animate emoji
+            const emoji = document.querySelector(`[data-mood="${mood}"] .mood-emoji`);
+            emoji.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                emoji.style.transform = 'scale(1.2)';
+            }, 200);
+        }
+
+        function saveMood() {
+            if (!selectedMood) {
+                showToast('Please select a mood first!', 'error');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const note = document.getElementById('journal-note').value;
+            
+            // Save mood entry
+            const moodEntry = {
+                id: Date.now(),
+                value: selectedMood,
+                note: note || null,
+                date: today,
+                createdAt: new Date().toISOString()
+            };
+
+            // Remove any existing entry for today
+            moodEntries = moodEntries.filter(entry => entry.date !== today);
+            moodEntries.push(moodEntry);
+            
+            localStorage.setItem('moodEntries', JSON.stringify(moodEntries));
+            
+            // Update button state
+            const btn = document.getElementById('save-mood-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Saving...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i>Save Check-in';
+                btn.disabled = false;
+                showToast('Mood saved! Your daily check-in has been recorded.', 'success');
+                updateProgress();
+            }, 1000);
+        }
+
+        function loadTodaysMood() {
+            const today = new Date().toISOString().split('T')[0];
+            const todaysMood = moodEntries.find(entry => entry.date === today);
+            
+            if (todaysMood) {
+                selectMood(todaysMood.value);
+                if (todaysMood.note) {
+                    document.getElementById('journal-note').value = todaysMood.note;
+                }
+            }
+        }
+
+        function renderHabits() {
+            const habitsList = document.getElementById('habits-list');
+            const today = new Date().toISOString().split('T')[0];
+            
+            habitsList.innerHTML = habits.map(habit => {
+                const isCompleted = habitEntries[today] && habitEntries[today][habit.id];
+                
+                return `
+                    <li class="habit-item">
+                        <div class="habit-info">
+                            <div class="habit-icon ${habit.color}">
+                                <i class="${habit.icon}"></i>
+                            </div>
+                            <div class="habit-details">
+                                <h4>${habit.name}</h4>
+                                <p>${habit.target}</p>
+                            </div>
+                        </div>
+                        <div class="habit-checkbox ${isCompleted ? 'completed' : ''}" 
+                             onclick="toggleHabit(${habit.id})" 
+                             id="habit-${habit.id}">
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function toggleHabit(habitId) {
+            const today = new Date().toISOString().split('T')[0];
+            const checkbox = document.getElementById(`habit-${habitId}`);
+            
+            // Add loading state
+            checkbox.classList.add('loading');
+            checkbox.innerHTML = '';
+            
+            setTimeout(() => {
+                // Initialize today's entries if not exists
+                if (!habitEntries[today]) {
+                    habitEntries[today] = {};
+                }
+                
+                // Toggle habit
+                const wasCompleted = habitEntries[today][habitId];
+                habitEntries[today][habitId] = !wasCompleted;
+                
+                // Save to localStorage
+                localStorage.setItem('habitEntries', JSON.stringify(habitEntries));
+                
+                // Update UI
+                checkbox.classList.remove('loading');
+                if (habitEntries[today][habitId]) {
+                    checkbox.classList.add('completed');
+                    showToast('Habit completed! Great job keeping up with your routine!', 'success');
+                } else {
+                    checkbox.classList.remove('completed');
+                    showToast('Habit unchecked. No worries, try again tomorrow!', 'success');
+                }
+                
+                updateProgress();
+            }, 500);
+        }
+
+        function updateProgress() {
+            const today = new Date().toISOString().split('T')[0];
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 6);
+            
+            // Calculate check-in percentage
+            const weeklyMoods = moodEntries.filter(entry => {
+                const entryDate = new Date(entry.date);
+                return entryDate >= weekAgo && entryDate <= new Date();
+            });
+            
+            const checkInPercentage = Math.round((weeklyMoods.length / 7) * 100);
+            const avgMood = weeklyMoods.length > 0 
+                ? (weeklyMoods.reduce((sum, mood) => sum + mood.value, 0) / weeklyMoods.length).toFixed(1)
+                : '0.0';
+            
+            // Calculate streak
+            let streak = 0;
+            const sortedMoods = moodEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            let currentDate = new Date();
+            
+            for (let i = 0; i < 30; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const hasMood = sortedMoods.some(mood => mood.date === dateStr);
+                
+                if (hasMood) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+                
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+            
+            // Update UI
+            document.getElementById('checkin-percentage').textContent = `${checkInPercentage}%`;
+            document.getElementById('checkin-count').textContent = `${weeklyMoods.length} of 7 days`;
+            document.getElementById('avg-mood').textContent = avgMood;
+            document.getElementById('streak-count').textContent = `${streak} day streak`;
+            
+            // Update progress rings
+            updateProgressRing('checkin-progress', checkInPercentage);
+            updateProgressRing('mood-progress', parseFloat(avgMood) * 20);
+        }
+
+        function updateProgressRing(elementId, percentage) {
+            const circle = document.getElementById(elementId);
+            const radius = 34;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percentage / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add some sample data for demo
+        function addSampleData() {
+            if (moodEntries.length === 0) {
+                const sampleMoods = [
+                    { id: 1, value: 4, date: '2025-07-14', createdAt: new Date().toISOString() },
+                    { id: 2, value: 3, date: '2025-07-13', createdAt: new Date().toISOString() },
+                    { id: 3, value: 5, date: '2025-07-12', createdAt: new Date().toISOString() }
+                ];
+                
+                moodEntries = sampleMoods;
+                localStorage.setItem('moodEntries', JSON.stringify(moodEntries));
+                updateProgress();
+            }
+        }
+
+        // Page navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName + '-page').classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                const indicator = item.querySelector('.nav-indicator');
+                if (indicator) indicator.remove();
+            });
+            
+            // Add active state to current nav item
+            const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(item => 
+                item.onclick.toString().includes(pageName)
+            );
+            if (activeNav) {
+                activeNav.classList.add('active');
+                const indicator = document.createElement('div');
+                indicator.className = 'nav-indicator';
+                activeNav.appendChild(indicator);
+            }
+            
+            currentPage = pageName;
+            
+            // Refresh data for specific pages
+            if (pageName === 'trends') {
+                renderTrends();
+            } else if (pageName === 'journal') {
+                renderJournalEntries();
+            } else if (pageName === 'profile') {
+                updateProfileStats();
+            }
+        }
+
+        // Journal functions
+        function saveJournalEntry() {
+            const content = document.getElementById('journal-entry').value.trim();
+            if (!content) {
+                showToast('Please write something in your journal!', 'error');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                content: content,
+                date: new Date().toISOString().split('T')[0],
+                time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                moodValue: selectedMood,
+                createdAt: new Date().toISOString()
+            };
+
+            journalEntries.unshift(entry);
+            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+            
+            document.getElementById('journal-entry').value = '';
+            renderJournalEntries();
+            showToast('Journal entry saved!', 'success');
+        }
+
+        function renderJournalEntries() {
+            const container = document.getElementById('journal-entries');
+            if (!container) return;
+
+            if (journalEntries.length === 0) {
+                container.innerHTML = `
+                    <div class="card fade-in">
+                        <div style="text-align: center; padding: 40px 20px; color: #6b7280;">
+                            <i class="fas fa-book" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p>No journal entries yet. Start writing your thoughts!</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = journalEntries.map(entry => `
+                <div class="journal-entry-card fade-in">
+                    <div class="journal-entry-header">
+                        <span class="journal-entry-date">${formatDate(entry.date)} at ${entry.time}</span>
+                        ${entry.moodValue ? `<span class="journal-entry-mood">${getMoodEmoji(entry.moodValue)}</span>` : ''}
+                    </div>
+                    <div class="journal-entry-content">${entry.content}</div>
+                </div>
+            `).join('');
+        }
+
+        // Trends functions
+        function renderTrends() {
+            drawMoodChart();
+            renderHabitTrends();
+            updateTrendStats();
+        }
+
+        function drawMoodChart() {
+            const canvas = document.getElementById('mood-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const week = getLast7Days();
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid and chart
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            
+            // Draw horizontal grid lines
+            for (let i = 0; i <= 5; i++) {
+                const y = 20 + (i * 25);
+                ctx.beginPath();
+                ctx.moveTo(30, y);
+                ctx.lineTo(270, y);
+                ctx.stroke();
+            }
+            
+            // Draw mood line
+            if (moodEntries.length > 0) {
+                ctx.strokeStyle = '#6366f1';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                
+                week.forEach((date, index) => {
+                    const mood = moodEntries.find(entry => entry.date === date);
+                    const x = 30 + (index * 40);
+                    const y = 145 - ((mood ? mood.value : 3) * 25);
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                
+                ctx.stroke();
+                
+                // Draw dots
+                ctx.fillStyle = '#6366f1';
+                week.forEach((date, index) => {
+                    const mood = moodEntries.find(entry => entry.date === date);
+                    const x = 30 + (index * 40);
+                    const y = 145 - ((mood ? mood.value : 3) * 25);
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+            }
+        }
+
+        function renderHabitTrends() {
+            const container = document.getElementById('habit-trends');
+            if (!container) return;
+
+            const week = getLast7Days();
+            const habitStats = habits.map(habit => {
+                const completedDays = week.filter(date => 
+                    habitEntries[date] && habitEntries[date][habit.id]
+                ).length;
+                const percentage = Math.round((completedDays / 7) * 100);
+                
+                return {
+                    name: habit.name,
+                    percentage: percentage,
+                    completedDays: completedDays
+                };
+            });
+
+            container.innerHTML = habitStats.map(stat => `
+                <div class="habit-trend-item">
+                    <span class="habit-trend-name">${stat.name}</span>
+                    <div class="habit-trend-progress">
+                        <div class="habit-trend-bar">
+                            <div class="habit-trend-fill" style="width: ${stat.percentage}%"></div>
+                        </div>
+                        <span class="habit-trend-percentage">${stat.percentage}%</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTrendStats() {
+            const week = getLast7Days();
+            const weeklyMoods = moodEntries.filter(entry => week.includes(entry.date));
+            
+            if (weeklyMoods.length > 0) {
+                const avgMood = (weeklyMoods.reduce((sum, mood) => sum + mood.value, 0) / weeklyMoods.length).toFixed(1);
+                document.getElementById('trend-avg-mood').textContent = avgMood;
+                
+                // Find best day
+                const dayMoods = {};
+                weeklyMoods.forEach(mood => {
+                    const dayName = new Date(mood.date).toLocaleDateString('en-US', { weekday: 'long' });
+                    if (!dayMoods[dayName] || dayMoods[dayName] < mood.value) {
+                        dayMoods[dayName] = mood.value;
+                    }
+                });
+                
+                const bestDay = Object.keys(dayMoods).reduce((a, b) => dayMoods[a] > dayMoods[b] ? a : b, 'Monday');
+                document.getElementById('trend-best-day').textContent = bestDay;
+            }
+        }
+
+        // Profile functions
+        function updateProfileStats() {
+            const totalEntries = moodEntries.length + journalEntries.length;
+            const currentStreak = calculateStreak();
+            const habitStats = calculateHabitStats();
+            
+            document.getElementById('profile-total-entries').textContent = totalEntries;
+            document.getElementById('profile-current-streak').textContent = currentStreak;
+            document.getElementById('profile-habits-completed').textContent = habitStats.total;
+        }
+
+        function calculateHabitStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const todaysHabits = habitEntries[today] || {};
+            const completed = Object.values(todaysHabits).filter(Boolean).length;
+            
+            return {
+                completed: completed,
+                total: habits.length,
+                percentage: Math.round((completed / habits.length) * 100)
+            };
+        }
+
+        function toggleSetting(settingName) {
+            settings[settingName] = !settings[settingName];
+            localStorage.setItem('settings', JSON.stringify(settings));
+            updateSettings();
+            
+            const messages = {
+                notifications: settings.notifications ? 'Notifications enabled' : 'Notifications disabled',
+                darkMode: settings.darkMode ? 'Dark mode enabled' : 'Dark mode disabled',
+                analytics: settings.analytics ? 'Analytics enabled' : 'Analytics disabled'
+            };
+            
+            showToast(messages[settingName], 'success');
+        }
+
+        function updateSettings() {
+            Object.keys(settings).forEach(setting => {
+                const toggle = document.querySelector(`[onclick*="${setting}"]`);
+                if (toggle) {
+                    if (settings[setting]) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // Helper functions
+        function getLast7Days() {
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                days.push(date.toISOString().split('T')[0]);
+            }
+            return days;
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        function getMoodEmoji(mood) {
+            const emojis = { 1: '😢', 2: '😟', 3: '😐', 4: '😊', 5: '🤗' };
+            return emojis[mood] || '😐';
+        }
+
+        function calculateStreak() {
+            let streak = 0;
+            const sortedMoods = moodEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            let currentDate = new Date();
+            
+            for (let i = 0; i < 30; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const hasMood = sortedMoods.some(mood => mood.date === dateStr);
+                
+                if (hasMood) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+                
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+            
+            return streak;
+        }
+
+        // Initialize with sample data
+        setTimeout(addSampleData, 1000);
+    </script>
+</body>
+</html>
