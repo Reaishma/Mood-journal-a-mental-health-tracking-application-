@@ -1,5 +1,9 @@
 # Mental Health Tracking Application
 
+# 🚀 Live Demo 
+
+View live demo https://reaishma.github.io/Mood-journal-a-mental-health-tracking-application-/
+
 ## Overview
 
 This is a full-stack mental health tracking application built with React, Express.js, and PostgreSQL. The application allows users to track their daily moods, manage habits, write journal entries, and view analytics about their mental health journey. It features a mobile-first design with a clean, modern interface using shadcn/ui components.
