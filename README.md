@@ -30,6 +30,9 @@ This is a full-stack mental health tracking application built with React, Expres
 - Progress analytics and streaks
 
 ### Analytics Dashboard
+
+![habbit tracking](https://github.com/Reaishma/Mood-journal-a-mental-health-tracking-application-/blob/main/Screenshot_20250905-131501_1.jpg)
+
 - Weekly check-in percentage with progress rings
 - Average mood calculation and trending
 - Habit completion rates and insights
