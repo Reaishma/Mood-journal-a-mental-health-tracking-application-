@@ -39,6 +39,9 @@ This is a full-stack mental health tracking application built with React, Expres
 - Monthly mood distribution charts
 
 ### Journal Integration
+
+![journal](https://github.com/Reaishma/Mood-journal-a-mental-health-tracking-application-/blob/main/Screenshot_20250905-131513_1.jpg)
+
 - Rich text journal entries
 - Mood association with entries
 - Date and time stamps
