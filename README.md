@@ -7,6 +7,10 @@ View live demo https://reaishma.github.io/Mood-journal-a-mental-health-tracking-
 
 ![mindwell user](https://github.com/Reaishma/Mood-journal-a-mental-health-tracking-application-/blob/main/Screenshot_20250905-131549_1.jpg)
 
+## 🧑‍💻 Developer 
+
+**Reaishma N**
+
 ## Overview
 
 This is a full-stack mental health tracking application built with React, Express.js, and PostgreSQL. The application allows users to track their daily moods, manage habits, write journal entries, and view analytics about their mental health journey. It features a mobile-first design with a clean, modern interface using shadcn/ui components.
@@ -157,9 +161,6 @@ DATABASE_URL=postgresql://user:password@localhost:5432/mindwell
 NODE_ENV=development
 ```
 
-## 🚀 Live Demo 
-
-[View live demo](https://reaishma.github.io/Mood-journal-a-mental-health-tracking-application-/)
 
 ## Key Components
 
@@ -302,8 +303,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support, bug reports, or feature requests:
 - Create an issue on GitHub
-- Contact the development team
-- Check the documentation
+- Contact the developer
+
 
 ## 🙏 Acknowledgments
 
