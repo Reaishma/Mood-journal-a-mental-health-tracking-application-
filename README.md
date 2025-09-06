@@ -15,6 +15,9 @@ This is a full-stack mental health tracking application built with React, Expres
 ## 📊 Features in Detail
 
 ### Mood Tracking
+
+![mood tracking](https://github.com/Reaishma/Mood-journal-a-mental-health-tracking-application-/blob/main/Screenshot_20250905-131308_1.jpg)
+
 - 5-point emotional scale with intuitive emoji interface
 - Optional text notes for context
 - Daily streak tracking for consistency
