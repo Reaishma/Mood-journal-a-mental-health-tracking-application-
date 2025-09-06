@@ -209,6 +209,9 @@ NODE_ENV=development
 3. Click "Save Check-in" to record your entry
 
 ### Habit Tracking
+
+![habbit tracking](https://github.com/Reaishma/Mood-journal-a-mental-health-tracking-application-/blob/main/Screenshot_20250905-131443_1.jpg)
+
 1. View your daily habits in the "Today's Habits" section
 2. Click the circular button next to each habit to mark as complete
 3. Track your progress with visual indicators
